@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+ <head>
+  <title>Lütfen Bekleyin...</title>
+ </head>
+ <body>
+  <img src="boot_screen.png" alt="img show error" width="324" height="324">
+  <style>
+   body {
+       margin: 0;
+       padding: 0;
+       height: 100vh; /* Sayfa yüksekliği kadar kaplar */
+       display: flex;
+       flex-direction: column; /* Yazıyı logonun altına koyar */
+       justify-content: center; /* Dikey olarak ortalar */
+       align-items: center; /* Yatay olarak ortalar */
+  </style>
+  <script>
+     // 2 saniye (2000 milisaniye) sonra yönlendirme yapar
+     setTimeout(function() {
+       window.location.href = "Giriş Yap.html"; // Buraya yönlendirmek istediğin sayfanın adını yaz
+     }, 2000);
+   </script>
+  </body>
+ </html>
