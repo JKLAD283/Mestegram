@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Shorts Video Oluştur</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f4; display: flex; justify-content: center; padding: 50px; }
+        .card { background: white; padding: 20px; border-radius: 10px; shadow: 0 4px 6px rgba(0,0,0,0.1); width: 400px; }
+        input, button { width: 100%; margin: 10px 0; padding: 10px; border-radius: 5px; border: 1px solid #ddd; box-sizing: border-box; }
+        button { background: #008577; color: white; border: none; cursor: pointer; font-weight: bold; }
+        button:hover { background: #00665c; }
+        #durum { text-align: center; color: #555; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2 style="color: #008577;">Yeni Video Yükle</h2>
+    <input type="file" id="videoSecici" accept="video/mp4">
+    <input type="text" id="videoIsmi" placeholder="Video başlığı girin...">
+    <button onclick="habersal()">Sisteme Gönder</button>
+    <p id="durum">Bekleniyor...</p>
+</div>
+
+<script>
+    async function habersal() {
+        const videoInput = document.getElementById('videoSecici');
+        const isimInput = document.getElementById('videoIsmi');
+        const durumText = document.getElementById('durum');
+
+        if (videoInput.files.length === 0) {
+            alert("Lütfen bir video dosyası seçin!");
+            return;
+        }
+
+        durumText.innerText = "Haber salınıyor, lütfen bekleyin...";
+
+        const dosya = videoInput.files[0];
+        const videoIsmi = isimInput.value || "isimsiz_video";
+
+        // JSON verisini hazırlıyoruz
+        const gonderiVerisi = {
+            video_ismi: videoIsmi,
+            nbt_kodu: "nbt_" + Math.random().toString(36).substr(2, 9),
+            tarih: new Date().toLocaleString('tr-TR')
+        };
+
+        // Form paketini oluşturuyoruz
+        const formData = new FormData();
+        formData.append("video_dosyasi", dosya);
+        formData.append("json_verisi", JSON.stringify(gonderiVerisi));
+
+        try {
+            const response = await fetch('http://localhost:3000/shorts-kaydet', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                durumText.style.color = "green";
+                durumText.innerText = "Başarılı! shorts.json güncellendi.";
+            } else {
+                durumText.style.color = "red";
+                durumText.innerText = "Hata: Sunucu dosyayı kabul etmedi.";
+            }
+        } catch (hata) {
+            durumText.style.color = "red";
+            durumText.innerText = "Hata: Sunucuya bağlanılamadı!)";
+        }
+    }
+</script>
+</body>
+</html>
